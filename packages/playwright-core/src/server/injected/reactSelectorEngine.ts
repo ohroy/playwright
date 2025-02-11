@@ -202,13 +202,31 @@ export const ReactEngine: SelectorEngine = {
       if (treeNode.key !== undefined)
         props.key = treeNode.key;
 
-      if (name && treeNode.name !== name)
-        return false;
+      if (name) {
+        if (name.startsWith('_r_')) {
+          const regex = new RegExp(name.substring(3, name.length - 3));
+          if (!regex.test(treeNode.name))
+            return false;
+        } else {
+          return treeNode.name !== name
+        }
+      }
       if (treeNode.rootElements.some(domNode => !isInsideScope(scope, domNode)))
         return false;
       for (const attr of attributes) {
+        if (attr.name === '__name__') {
+          if (treeNode.name !== attr.value)
+            return false
+          continue
+        }
+        if (attr.name === '__regex__') {
+          const reg = new RegExp(attr.value);
+          if (!reg.test(treeNode.name))
+            return false
+          continue
+        }
         if (!matchesComponentAttribute(props, attr))
-          return false;
+          return false
       }
       return true;
     })).flat();
