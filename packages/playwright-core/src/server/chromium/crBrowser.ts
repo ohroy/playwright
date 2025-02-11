@@ -111,6 +111,7 @@ export class CRBrowser extends Browser {
     }
 
     const { browserContextId } = await this._session.send('Target.createBrowserContext', {
+      originsWithUniversalNetworkAccess: (options as any).originsWithUniversalNetworkAccess,
       disposeOnDetach: true,
       proxyServer: proxy ? proxy.server : undefined,
       proxyBypassList,

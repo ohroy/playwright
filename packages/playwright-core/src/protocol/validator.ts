@@ -625,6 +625,7 @@ scheme.BrowserDefaultUserAgentForTestResult = tObject({
   userAgent: tString,
 });
 scheme.BrowserNewContextParams = tObject({
+  originsWithUniversalNetworkAccess: tOptional(tArray(tString)),
   noDefaultViewport: tOptional(tBoolean),
   viewport: tOptional(tObject({
     width: tNumber,

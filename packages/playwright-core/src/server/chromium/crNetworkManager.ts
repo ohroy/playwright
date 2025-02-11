@@ -154,7 +154,7 @@ export class CRNetworkManager {
     const enabled = this._protocolRequestInterceptionEnabled;
     if (initial && !enabled)
       return;
-    const cachePromise = info.session.send('Network.setCacheDisabled', { cacheDisabled: enabled });
+    const cachePromise = info.session.send('Network.setCacheDisabled', { cacheDisabled: false });
     let fetchPromise = Promise.resolve<any>(undefined);
     if (!info.workerFrame) {
       if (enabled)
