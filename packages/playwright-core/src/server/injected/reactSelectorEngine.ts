@@ -208,18 +208,34 @@ export const ReactEngine: SelectorEngine = {
         return false;
       for (const attr of attributes) {
         if (attr.name === '__name__') {
-          if (treeNode.name !== attr.value)
-            return false
-          continue
+          if (attr.op === '='){
+            if (attr.value instanceof RegExp || Object.prototype.toString.call(attr.value) === '[object RegExp]'){
+              if (!attr.value.test(treeNode.name))
+                return false;
+            } else {
+              if (treeNode.name !== attr.value)
+                return false;
+            }
+          } else if (attr.op === '$='){
+            if (!treeNode.name.endsWith(attr.value))
+              return false;
+          } else if (attr.op === '^='){
+            if (!treeNode.name.startsWith(attr.value))
+              return false;
+          } else if (attr.op === '*='){
+            if (!treeNode.name.includes(attr.value))
+              return false;
+          }
+          continue;
         }
         if (attr.name === '__regex__') {
           const reg = new RegExp(attr.value);
           if (!reg.test(treeNode.name))
-            return false
-          continue
+            return false;
+          continue;
         }
         if (!matchesComponentAttribute(props, attr))
-          return false
+          return false;
       }
       return true;
     })).flat();
